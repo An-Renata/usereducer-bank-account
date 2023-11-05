@@ -1,13 +1,49 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html {
+  font-size: 62.5%;
+  font-family: "Abril Fatface", serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.app {
+  max-width: 60rem;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 2rem;
+  background-color: #bca37f5c;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.btn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+.update-user-account,
+.manage-account {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1rem;
+}
+
+.manage-account {
+  justify-self: center;
+}
+
+button {
+  padding: 10px 15px;
+  width: 14rem;
+  border: 2px solid #8dbddf54;
+  background-color: #ff9209;
+  color: #ffffffd2;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+button:hover {
+  transform: translateX(-5px);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }

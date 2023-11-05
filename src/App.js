@@ -1,5 +1,9 @@
 import "./index.css";
-
+import Header from "./components/Header";
+import Main from "./components/Main";
+import UserBankInfo from "./components/UserBankInfo";
+import Button from "./components/Button";
+import ButtonGrid from "./components/ButtonGrid";
 /*
 INSTRUCTIONS / CONSIDERATIONS:
 
@@ -25,42 +29,30 @@ const initialState = {
 };
 
 export default function App() {
-  return (
-    <div className="App">
-      <h1>useReducer Bank Account</h1>
-      <p>Balance: X</p>
-      <p>Loan: X</p>
 
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Open account
-        </button>
-      </p>
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Deposit 150
-        </button>
-      </p>
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Withdraw 50
-        </button>
-      </p>
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Request a loan of 5000
-        </button>
-      </p>
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Pay loan
-        </button>
-      </p>
-      <p>
-        <button onClick={() => {}} disabled={false}>
-          Close account
-        </button>
-      </p>
+  const []
+
+  return (
+    <div className="app">
+      <Header>
+        <h1>useReducer Bank Account</h1>
+      </Header>
+      <Main>
+        <UserBankInfo />
+        <ButtonGrid>
+          <div className="manage-account">
+            <Button>Open account</Button>
+            <Button>Close account</Button>
+          </div>
+
+          <div className="update-user-account">
+            <Button>Deposit 150 Eur</Button>
+            <Button>Withdraw 50 Eur</Button>
+            <Button>Request a loan of 5000 Eur</Button>
+            <Button>Pay loan</Button>
+          </div>
+        </ButtonGrid>
+      </Main>
     </div>
   );
 }
