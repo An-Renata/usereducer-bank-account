@@ -1,8 +1,8 @@
-function UserBankInfo() {
+function UserBankInfo({ balance, loan }) {
   return (
     <div className="user-bank-info">
-      <p>Balance: X</p>
-      <p>Loan: X</p>
+      <p>Balance: {balance}</p>
+      <p>Loan: {loan}</p>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import "./index.css";
+import { useReducer } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import UserBankInfo from "./components/UserBankInfo";
@@ -22,15 +23,70 @@ INSTRUCTIONS / CONSIDERATIONS:
 7. Customer can only close an account if there is no loan, AND if the balance is zero. If this condition is not met, just return the state. If the condition is met, the account is deactivated and all money is withdrawn. The account basically gets back to the initial state
 */
 
+const DEPOSIT = 150;
+const WITHDRAW = 50;
+const LOAN = 5000;
+
 const initialState = {
-  balance: 0,
+  balance: 500,
   loan: 0,
   isActive: false,
+  isLoan: false,
+  disableBtn: false,
 };
 
-export default function App() {
+function reducer(state, action) {
+  switch (action.type) {
+    case "openAccount":
+      return {
+        ...state,
+        isActive: true,
+        disableBtn: true,
+      };
+    case "closeAccount":
+      if (state.balance === 0 && !state.isLoan) {
+        return { ...initialState, disableBtn: false };
+      }
+      return { ...state };
+    case "deposit":
+      return {
+        ...state,
+        balance: state.balance + DEPOSIT,
+      };
+    case "withdraw":
+      return { ...state, balance: state.balance - WITHDRAW };
+    case "requestLoan":
+      // is there is a currently a loan, do not let the user take a new one, when the previous wasn't paid back
+      if (state.isLoan === false) {
+        return {
+          ...state,
+          disableBtn: false,
+          isLoan: true,
+          balance: state.balance + LOAN,
+          loan: LOAN,
+        };
+      }
+      return { ...state };
+    case "payLoan":
+      if (state.balance >= LOAN && state.isLoan) {
+        return {
+          ...state,
+          balance: state.balance - LOAN,
+          loan: state.loan - LOAN,
+          isLoan: false,
+        };
+      }
+      return { ...state, isLoan: true };
+    default:
+      throw new Error("Unknown action type");
+  }
+}
 
-  const []
+export default function App() {
+  const [{ isActive, balance, loan, disableBtn }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   return (
     <div className="app">
@@ -38,19 +94,43 @@ export default function App() {
         <h1>useReducer Bank Account</h1>
       </Header>
       <Main>
-        <UserBankInfo />
+        {/* initial isActive === false since there is no new account */}
+        {isActive && <UserBankInfo balance={balance} loan={loan} />}
         <ButtonGrid>
           <div className="manage-account">
-            <Button>Open account</Button>
-            <Button>Close account</Button>
+            <Button
+              type={"openAccount"}
+              disableBtn={disableBtn}
+              dispatch={dispatch}
+            >
+              Open account
+            </Button>
+            {/* initial isActive === false since there is no new account */}
+            {isActive && (
+              <Button type={"closeAccount"} dispatch={dispatch}>
+                Close account
+              </Button>
+            )}
           </div>
-
-          <div className="update-user-account">
-            <Button>Deposit 150 Eur</Button>
-            <Button>Withdraw 50 Eur</Button>
-            <Button>Request a loan of 5000 Eur</Button>
-            <Button>Pay loan</Button>
-          </div>
+          {/* initial isActive === false since there is no new account */}
+          {isActive && (
+            <>
+              <div className="update-user-account">
+                <Button dispatch={dispatch} type={"deposit"}>
+                  Deposit 150 Eur
+                </Button>
+                <Button dispatch={dispatch} type={"withdraw"}>
+                  Withdraw 50 Eur
+                </Button>
+                <Button type={"requestLoan"} dispatch={dispatch}>
+                  Request a loan of 5000 Eur
+                </Button>
+                <Button dispatch={dispatch} type={"payLoan"}>
+                  Pay loan
+                </Button>
+              </div>
+            </>
+          )}
         </ButtonGrid>
       </Main>
     </div>

@@ -47,3 +47,13 @@ button:hover {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
+
+button:hover:disabled,
+button:hover[disabled] {
+  transform: translateX(0);
+  box-shadow: none;
+}
+button:disabled,
+button[disabled] {
+  cursor: not-allowed;
+}
