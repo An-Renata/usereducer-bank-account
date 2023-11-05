@@ -83,10 +83,8 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{ isActive, balance, loan, disableBtn }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ isActive, balance, loan, disableBtn, isLoan }, dispatch] =
+    useReducer(reducer, initialState);
 
   return (
     <div className="app">
@@ -107,9 +105,11 @@ export default function App() {
             </Button>
             {/* initial isActive === false since there is no new account */}
             {isActive && (
-              <Button type={"closeAccount"} dispatch={dispatch}>
-                Close account
-              </Button>
+              <>
+                <Button type={"closeAccount"} dispatch={dispatch}>
+                  Close account
+                </Button>
+              </>
             )}
           </div>
           {/* initial isActive === false since there is no new account */}
@@ -117,13 +117,13 @@ export default function App() {
             <>
               <div className="update-user-account">
                 <Button dispatch={dispatch} type={"deposit"}>
-                  Deposit 150 Eur
+                  Deposit 150 €
                 </Button>
                 <Button dispatch={dispatch} type={"withdraw"}>
-                  Withdraw 50 Eur
+                  Withdraw 50 €
                 </Button>
                 <Button type={"requestLoan"} dispatch={dispatch}>
-                  Request a loan of 5000 Eur
+                  Request a loan of 5000 €
                 </Button>
                 <Button dispatch={dispatch} type={"payLoan"}>
                   Pay loan
