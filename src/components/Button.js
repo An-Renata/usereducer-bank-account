@@ -1,9 +1,9 @@
-function Button({ children, dispatch, type, disableBtn }) {
+function Button({ children, dispatch, type, disabled, payload = 0 }) {
   return (
     <button
-      onClick={() => dispatch({ type: type })}
+      onClick={() => dispatch({ type: type, payload: payload })}
       // if any of conditions are true, return true to a button and disable it
-      disabled={disableBtn}
+      disabled={disabled}
     >
       {children}
     </button>

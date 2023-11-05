@@ -23,16 +23,12 @@ INSTRUCTIONS / CONSIDERATIONS:
 7. Customer can only close an account if there is no loan, AND if the balance is zero. If this condition is not met, just return the state. If the condition is met, the account is deactivated and all money is withdrawn. The account basically gets back to the initial state
 */
 
-const DEPOSIT = 150;
-const WITHDRAW = 50;
-const LOAN = 5000;
-
 const initialState = {
   balance: 500,
   loan: 0,
   isActive: false,
   isLoan: false,
-  disableBtn: false,
+  btnOpenAccount: false,
 };
 
 function reducer(state, action) {
@@ -41,50 +37,55 @@ function reducer(state, action) {
       return {
         ...state,
         isActive: true,
-        disableBtn: true,
+        btnOpenAccount: true,
       };
     case "closeAccount":
       if (state.balance === 0 && !state.isLoan) {
-        return { ...initialState, disableBtn: false };
+        return { ...initialState }; // reset to initial state
       }
       return { ...state };
     case "deposit":
       return {
         ...state,
-        balance: state.balance + DEPOSIT,
+        balance: state.balance + action.payload,
       };
     case "withdraw":
-      return { ...state, balance: state.balance - WITHDRAW };
+      return {
+        ...state,
+        balance: state.balance - action.payload,
+      };
     case "requestLoan":
       // is there is a currently a loan, do not let the user take a new one, when the previous wasn't paid back
-      if (state.isLoan === false) {
+      if (state.loan === 0) {
         return {
           ...state,
-          disableBtn: false,
           isLoan: true,
-          balance: state.balance + LOAN,
-          loan: LOAN,
+          balance: state.balance + action.payload,
+          loan: action.payload,
         };
       }
       return { ...state };
     case "payLoan":
-      if (state.balance >= LOAN && state.isLoan) {
+      if (state.loan > 0) {
         return {
           ...state,
-          balance: state.balance - LOAN,
-          loan: state.loan - LOAN,
+          balance: state.balance - action.payload,
+          loan: 0,
           isLoan: false,
         };
       }
       return { ...state, isLoan: true };
+
     default:
       throw new Error("Unknown action type");
   }
 }
 
 export default function App() {
-  const [{ isActive, balance, loan, disableBtn, isLoan }, dispatch] =
-    useReducer(reducer, initialState);
+  const [{ isActive, balance, loan, btnOpenAccount }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   return (
     <div className="app">
@@ -98,7 +99,8 @@ export default function App() {
           <div className="manage-account">
             <Button
               type={"openAccount"}
-              disableBtn={disableBtn}
+              // disableBtn={disableBtn}
+              disabled={btnOpenAccount}
               dispatch={dispatch}
             >
               Open account
@@ -116,16 +118,16 @@ export default function App() {
           {isActive && (
             <>
               <div className="update-user-account">
-                <Button dispatch={dispatch} type={"deposit"}>
+                <Button dispatch={dispatch} type={"deposit"} payload={150}>
                   Deposit 150 €
                 </Button>
-                <Button dispatch={dispatch} type={"withdraw"}>
+                <Button dispatch={dispatch} type={"withdraw"} payload={50}>
                   Withdraw 50 €
                 </Button>
-                <Button type={"requestLoan"} dispatch={dispatch}>
+                <Button type={"requestLoan"} dispatch={dispatch} payload={5000}>
                   Request a loan of 5000 €
                 </Button>
-                <Button dispatch={dispatch} type={"payLoan"}>
+                <Button dispatch={dispatch} type={"payLoan"} payload={5000}>
                   Pay loan
                 </Button>
               </div>
